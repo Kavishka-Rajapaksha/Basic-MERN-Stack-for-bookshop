@@ -9,6 +9,16 @@ app.get("/", (req, res)=>{
     return res.status(234).send('Welcome to the MERN');
 });
 
-app.listen(PORT, ()=>{
-    console.log(`App is listent to the port ${PORT}`);
-});
+
+mongoose
+    .connect(mongoURL)
+    .then(()=>{
+        console.log('App Connnected to database');
+        app.listen(PORT, ()=>{
+            console.log(`App is listent to the port ${PORT}`);
+        });
+        
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
