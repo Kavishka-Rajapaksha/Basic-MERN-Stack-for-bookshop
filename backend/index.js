@@ -2,11 +2,22 @@ import express from "express";
 import { PORT, mongoURL } from "./config.js";
 import mongoose from 'mongoose';
 import { Book } from "./models/bookModels.js";
+import booksRoute from "./routes/booksRoute.js";
+import cors from 'cors';
 
 const app = express() 
 
 // Middleware for  passing request body
 app.use(express.json());
+
+// middleware for passing request body CORS Policy
+app.use(
+    cors({
+        origin: "http://localhost:5555",
+        methods: "GET, POST, PUT, DELETE",
+        allowedHeaders: ["Content-Type"]
+    })
+)
 
 // Define routes
 app.get("/", (req, res)=>{
@@ -14,32 +25,7 @@ app.get("/", (req, res)=>{
     return res.status(234).send('Welcome to the MERN');
 });
 
-
-//Rounte for save a new book
-app.post('/books',async (req, res)=>{
-    try {
-        if(
-            !req.body.title ||
-            !req.body.author ||
-            !req.body.publishYear
-        ){
-            return res.status(400).send({
-                message : 'All fields are required title author publishYear'
-            });
-        }
-        const newBook = {
-            title : req.body.title,
-            author : req.body.author,
-            publishYear : req.body.publishYear
-        };
-        const book = await Book.create(newBook);
-        return res.status(201).send(book);
-        
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send({message : error.message});
-    }
-})
+app.use('/books', booksRoute);
 
 
 //database connection
