@@ -13,13 +13,18 @@ const app = express()
 app.use(express.json());
 
 // middleware for passing request body CORS Policy
-app.use(
-    cors({
-        origin: "http://localhost:5555",
-        methods: "GET, POST, PUT, DELETE",
-        allowedHeaders: ["Content-Type"]
-    })
-)
+//method 1
+app.use(cors()); // Enable all CORS requests (not recommended for production)
+
+
+//method 2
+// app.use(
+//     cors({
+//         origin: "http://localhost:5555",
+//         methods: "GET, POST, PUT, DELETE",
+//         allowedHeaders: ["Content-Type"]
+//     })
+// )
 
 // Define routes
 app.get("/", (req, res)=>{
